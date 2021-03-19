@@ -1,0 +1,8 @@
+.board {
+  background: url("./galaxy_background_78.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 300vh;
+  width: 300vw;
+  position: fixed;
+}
