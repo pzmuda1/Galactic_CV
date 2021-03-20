@@ -7,11 +7,11 @@ const MIN_VELOCITY = 0.1;
 
 const VELOCITY_MULTIPLIER = 1.02;
 
-const MAX_FORWARD_VELOCITY = 1;
-const MAX_BACKWARD_VELOCITY = -0.5;
+const MAX_FORWARD_VELOCITY = 1.1;
+const MAX_BACKWARD_VELOCITY = -0.6;
 
 export const velocity = new BehaviorSubject(0);
-const isAccelerating = new BehaviorSubject(false);
+export const isAccelerating = new BehaviorSubject(false);
 const isGoingBackward = new BehaviorSubject(false);
 
 export const velocity$ = combineLatest([velocity, windowSize]).pipe(

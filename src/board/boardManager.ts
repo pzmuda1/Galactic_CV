@@ -1,15 +1,15 @@
 import { BehaviorSubject } from "rxjs";
 import { shipAngle } from "../ship/shipManager";
-import { getCosFromDegrees, getSinFromDegrees, appendToRoot } from "../utils";
+import { getCosFromDegrees, getSinFromDegrees, appendToEl } from "../utils";
 import { velocity$ } from "../velocityManager";
-import "./board.css";
+import "./board.scss";
 import board from "./board.html";
 
 // in vw and vh
-const BOARD_SIZE = 3;
+export const BOARD_SIZE = 3;
 const BOARD_SIZE_MULITPLIER = 0.0015;
 
-appendToRoot(board);
+appendToEl(board);
 export const boardElement = document.getElementById("board");
 
 export const boardPosition = new BehaviorSubject({

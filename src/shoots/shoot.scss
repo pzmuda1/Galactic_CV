@@ -1,0 +1,178 @@
+#tridiv-shoot {
+  perspective: 800px;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  background: transparent;
+  font-size: 0.17em;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  margin: -25px 0 0 -25px;
+
+  .face {
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+  }
+
+  .scene,
+  .shape,
+  .face,
+  .face-wrapper,
+  .cr {
+    position: absolute;
+    transform-style: preserve-3d;
+  }
+
+  .scene {
+    width: 80em;
+    height: 80em;
+    top: 50%;
+    left: 50%;
+    margin: -40em 0 0 -40em;
+  }
+
+  .shape {
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform-origin: 50%;
+  }
+
+  .face,
+  .face-wrapper {
+    overflow: hidden;
+    transform-origin: 0 0;
+    backface-visibility: hidden;
+    /* hidden by default, prevent blinking and other weird rendering glitchs */
+  }
+
+  .face {
+    background-size: 100% 100% !important;
+    background-position: center;
+  }
+
+  .face-wrapper .face {
+    left: 100%;
+    width: 100%;
+    height: 100%
+  }
+
+  .photon-shader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%
+  }
+
+  .side {
+    left: 50%;
+  }
+
+  .cr,
+  .cr .side {
+    height: 100%;
+  }
+
+  [class*="cylinder"] .tp {
+    transform: rotateX(90deg) translateY(-50%);
+  }
+
+  [class*="cylinder"] .bm {
+    transform: rotateX(-90deg) translateY(-50%);
+  }
+
+  [class*="cylinder"] .tp,
+  [class*="cylinder"] .bm,
+  [class*="cylinder"] .tp .photon-shader,
+  [class*="cylinder"] .bm .photon-shader {
+    border-radius: 50%;
+  }
+
+  [class*="cylinder"] .bm {
+    top: 100%;
+  }
+
+  /* .cyl-1 styles */
+  .cyl-1 {
+    transform: translate3D(0em, 0em, 0em) rotateX(90deg) rotateY(0deg) rotateZ(0deg);
+    opacity: 1;
+    width: 1.25em;
+    height: 10.125em;
+    margin: -5.0625em 0 0 -0.625em;
+  }
+
+  .cyl-1 .tp,
+  .cyl-1 .bm {
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  .cyl-1 .side {
+    width: 0.31030434298768744em;
+    height: 10.125em;
+  }
+
+  .cyl-1 .s0 {
+    transform: rotateY(12.857142857142858deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s1 {
+    transform: rotateY(38.57142857142857deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s2 {
+    transform: rotateY(64.28571428571429deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s3 {
+    transform: rotateY(90deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s4 {
+    transform: rotateY(115.71428571428572deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s5 {
+    transform: rotateY(141.42857142857144deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s6 {
+    transform: rotateY(167.14285714285714deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s7 {
+    transform: rotateY(192.85714285714286deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s8 {
+    transform: rotateY(218.57142857142858deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s9 {
+    transform: rotateY(244.2857142857143deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s10 {
+    transform: rotateY(270deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s11 {
+    transform: rotateY(295.7142857142857deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s12 {
+    transform: rotateY(321.4285714285714deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .s13 {
+    transform: rotateY(347.1428571428571deg) translate3D(-50%, 0, 0.6em);
+  }
+
+  .cyl-1 .face,
+  .cyl-1 .side {
+    background-color: #ff3838;
+  }
+}

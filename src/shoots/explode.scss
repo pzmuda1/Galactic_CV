@@ -1,0 +1,91 @@
+$white: #e4f9fa;
+$yellow: #fde655;
+$orange: #d47946;
+$red: #7a2c1f;
+
+h1 {
+  font-size: 1.75rem;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-weight: 200;
+  text-transform: uppercase;
+  line-height: 1.4;
+  text-shadow: 0 0.25em 0 rgba(#000,.5);
+}
+.container {
+  position: absolute;
+  width: 20rem; height: 20rem;
+  pointer-events: none;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    display: block; 
+    width: 2rem; height: 2rem;
+    background: rgba(#000,.25);
+    transform: rotate(45deg);
+    outline: 10px solid rgba(#000,.1);
+  }
+  &:nth-child(4n),
+  &:nth-child(7n){
+    &:before {
+      display: none;
+    }
+  }
+}
+.particle {
+  position: absolute;
+  display: block;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  
+  @for $i from 0 through 20 {
+    &:nth-child(#{$i + 1}) {
+      .sparcle {
+        animation-delay: $i * 50ms;
+      }
+    }
+  } 
+}
+.sparcle {
+  position: absolute;
+  display: block;
+  top: 0; left: 0;
+  width: 3rem; height: 3rem;
+  background: rgba($white,0);
+  will-change: transform, box-shadow, background-color;
+  transform: rotate(45deg) scale(0.5) translateZ(0);
+  animation: explode 333ms;
+  
+  box-shadow: 0 0 0 0 $yellow;
+}
+
+@keyframes explode {
+  0% {
+    background-color: $white;
+    transform: rotate(45deg) scale(1.2) translateZ(0);
+    box-shadow: 0 0 0 0 $yellow;
+  }
+  40% {
+    background-color: rgba($white,.1);
+  }
+  50% {
+    transform: rotate(45deg) scale(1) translateZ(0);
+    box-shadow: 0 0 0 10px $yellow;
+    background-color: rgba($white,0);
+  }
+  60% {
+    box-shadow: 0 0 0 50px $orange;
+    transform: rotate(45deg) scale(0.5) translateZ(0);
+  }
+  70% {
+    background-color: rgba($white,0);
+    box-shadow: 0 0 0 30px $red;
+  }
+  100% {
+    background-color: $red;
+    box-shadow: 0 0 0 0 $red;
+    transform: rotate(45deg) scale(0.25) translateZ(0);
+  }
+}

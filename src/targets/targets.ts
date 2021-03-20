@@ -3,7 +3,7 @@ import { distinctUntilChanged, pairwise } from "rxjs/operators";
 import { boardElement, boardPosition } from "../board/boardManager";
 import { shipPosition } from "../ship/shipManager";
 import { windowSize } from "../windowSize";
-import "./targets.css";
+import "./targets.scss";
 
 const activeTarget = new BehaviorSubject(null);
 
@@ -61,7 +61,6 @@ combineLatest([shipPosition, boardPosition, windowSize]).subscribe(
 activeTarget
   .pipe(distinctUntilChanged(), pairwise())
   .subscribe(([past, current]) => {
-    console.log(past, current);
     if (past !== null) {
       const el = document.getElementById("target_" + past);
       el.classList.remove("active");

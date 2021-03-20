@@ -16,9 +16,11 @@ export const listenToKey = (
     constant,
     onEnd,
     onStart,
+    constantInterval,
   }: {
     onStart?: () => void;
     constant?: () => void;
+    constantInterval?: number;
     onEnd?: () => void;
   }
 ) => {
@@ -36,7 +38,7 @@ export const listenToKey = (
       );
 
       if (constant) {
-        timer(0, 10)
+        timer(onStart ? 500 : 0, constantInterval ?? 10)
           .pipe(takeUntil(onEndObs))
           .subscribe(() => {
             constant();
@@ -47,13 +49,14 @@ export const listenToKey = (
     });
 };
 
-const root = document.getElementById("root");
-export function appendToRoot(val: string) {
+export const root = document.getElementById("root");
+
+export function appendToEl(val: string, el: HTMLElement = root) {
   var template = document.createElement("template");
   val = val?.trim(); // Never return a text node of whitespace as the result
-  template.innerHTML = sanitize(`<div>${sanitize(val)}</div>`);
+  template.innerHTML = sanitize(`${sanitize(val)}`);
 
-  root.appendChild(template.content.firstChild);
+  const node = el.appendChild(template.content.firstChild);
 
-  return template.content.firstChild;
+  return node as HTMLElement;
 }
