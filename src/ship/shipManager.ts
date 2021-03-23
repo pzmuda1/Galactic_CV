@@ -1,5 +1,10 @@
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { debounceTime, filter, throttleTime } from "rxjs/operators";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  throttleTime,
+} from "rxjs/operators";
 import {
   appendToEl,
   getCosFromDegrees,
@@ -12,12 +17,11 @@ import html from "./ship.html";
 import { accelerateSound, stopAccelerateSound } from "./accelerateSound";
 import { boardPosition, BOARD_SIZE } from "../board/boardManager";
 
-appendToEl(html);
-const shipElement = document.getElementById("ship");
+const shipElement = appendToEl(html, document.body);
 const xWingElement = document.getElementById("x-wing");
 
-const MAX_Y = 120;
-const MAX_X = 120;
+const MAX_Y = 50;
+const MAX_X = 50;
 
 const SCREEN_PADDING = 50;
 
@@ -55,13 +59,19 @@ velocity$.subscribe(([val, { height, width }]) => {
     Math.abs(shipLeft) > MAX_X
   ) {
     shipPosition.next({
-      left: Math.min(Math.max(left, -0.5 * width + SCREEN_PADDING), 0.5 * width - SCREEN_PADDING),
-      top: Math.min(Math.max(top, -0.5 * height + SCREEN_PADDING), 0.5 * height - SCREEN_PADDING),
+      left: Math.min(
+        Math.max(left, -0.5 * width + SCREEN_PADDING),
+        0.5 * width - SCREEN_PADDING
+      ),
+      top: Math.min(
+        Math.max(top, -0.5 * height + SCREEN_PADDING),
+        0.5 * height - SCREEN_PADDING
+      ),
     });
   }
 });
 
-isAccelerating.subscribe((state) => {
+isAccelerating.pipe(distinctUntilChanged()).subscribe((state) => {
   if (state) {
     accelerateSound();
     shipElement.classList.add("accelerating");
@@ -83,13 +93,7 @@ listenToKey("ArrowRight", {
   },
 });
 
-combineLatest([shipPosition, shipAngle])
-  .pipe(throttleTime(10))
-  .subscribe(([{ left, top }, angle]) => {
-    window.requestAnimationFrame(() => {
-      shipElement.style.transform = `translateX(${left}px) translateY(${top}px)`;
-      xWingElement.style.transform = `rotateX(-30deg) rotateY(${
-        90 - angle
-      }deg)`;
-    });
-  });
+combineLatest([shipPosition, shipAngle]).subscribe(([{ left, top }, angle]) => {
+  shipElement.style.transform = `translateX(${left}px) translateY(${top}px)`;
+  xWingElement.style.transform = `rotateX(-30deg) rotateY(${90 - angle}deg)`;
+});

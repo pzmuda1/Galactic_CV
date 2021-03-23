@@ -34,6 +34,7 @@ var config = {
   context: path.resolve("./src"),
   entry: {
     app: "./index.ts",
+    game: "./game.ts",
   },
   output: {
     path: path.resolve("./dist"),
@@ -42,6 +43,11 @@ var config = {
   resolve: {
     extensions: [".ts", ".js", ".html", ".jsx", ".tsx", ".css"],
     modules: ["node_modules"],
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
   },
   module: {
     rules: [

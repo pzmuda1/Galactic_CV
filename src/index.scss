@@ -2,10 +2,31 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
+  background: radial-gradient(circle at bottom, navy 0, black 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-#root {
+
+#root,
+#start-overlay {
   width: 100vw;
   height: 100vh;
-  position: relative;
   overflow: hidden;
+  max-width: 1920px;
+  max-height: 1080px;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  position: fixed;
+  background: black;
+}
+
+#start-overlay {
+  z-index: 100;
+  transition: opacity 1s;
+
+  &.fadeOut {
+    opacity: 0;
+  }
 }

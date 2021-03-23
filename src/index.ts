@@ -1,11 +1,8 @@
 import "./index.scss";
+import "./intro/intro";
 
-import "./ship/shipManager";
-import "./board/boardManager";
-import "./targets/targets";
-import "./shoots/shoots";
-import { addEnemy } from "./enemy/enemy";
-
-addEnemy({top: 50, left: 50});
-addEnemy({top: 300, left: 50});
-addEnemy({top: 300, left: 250});
+window.onload = () => {
+  import('./game').then(({initGame}) => {
+    initGame();
+  })
+};

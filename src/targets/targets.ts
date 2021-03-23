@@ -10,18 +10,21 @@ const activeTarget = new BehaviorSubject(null);
 const targets = [
   {
     label: "Testowy cel",
-    left: 1.2,
-    top: 1.2,
+    left: 0.5,
+    top: 0.5,
+    el: null as HTMLDivElement
   },
   {
     label: "Testowy cel 2",
-    left: 2,
-    top: 1.4,
+    left: 1,
+    top: 1.2,
+    el: null as HTMLDivElement
   },
   {
     label: "Testowy cel 3",
-    left: 1.4,
-    top: 2,
+    left: 1.2,
+    top: 1.5,
+    el: null as HTMLDivElement
   },
 ];
 
@@ -33,6 +36,7 @@ targets.forEach(({ label, left, top }, index) => {
   targetEl.classList.add("target");
   targetEl.id = "target_" + index;
 
+  targets[index].el = targetEl;
   boardElement.appendChild(targetEl);
 });
 
@@ -42,10 +46,11 @@ combineLatest([shipPosition, boardPosition, windowSize]).subscribe(
     { top: boardTop, left: boardLeft },
     { height, width },
   ]) => {
-    targets.forEach(({ label, left, top }, index) => {
+    targets.forEach(({ el, left, top }, index) => {
+      el.style.left = `${left * width}px`;
+      el.style.top = `${top * height}px`;
       const distanceXFromCenter = (left - 0.5) * width;
       const distanceYFromCenter = (top - 0.5) * height;
-
       if (
         Math.abs(distanceYFromCenter - shipTop + boardTop * height) < 100 &&
         Math.abs(distanceXFromCenter - shipLeft + boardLeft * width) < 100

@@ -32,33 +32,33 @@ const fire = () => {
     return;
   }
 
-  const el = appendToEl(html, boardElement);
-  const { left: boardLeft, top: boardTop } = boardPosition.value;
-  const { left: shipLeft, top: shipTop } = shipPosition.value;
+  windowSize.subscribe(({ height, width }) => {
+    const el = appendToEl(html, boardElement);
+    const { left: boardLeft, top: boardTop } = boardPosition.value;
+    const { left: shipLeft, top: shipTop } = shipPosition.value;
 
-  const id = new Date().getTime();
-  const shoot: IShoot = {
-    top: (-boardTop + 0.5) * window.innerHeight + shipTop,
-    left: (-boardLeft + 0.5) * window.innerWidth + shipLeft,
-    angle: shipAngle.value,
-    el: el as HTMLDivElement,
-    id,
-  };
+    const id = new Date().getTime();
+    const shoot: IShoot = {
+      top: (-boardTop + 0.5) * height + shipTop,
+      left: (-boardLeft + 0.5) * width + shipLeft,
+      angle: shipAngle.value,
+      el: el as HTMLDivElement,
+      id,
+    };
 
-  shootSound();
-  shoots.next({
-    ...shoots.value,
-    [id]: shoot,
+    shootSound();
+    shoots.next({
+      ...shoots.value,
+      [id]: shoot,
+    });
   });
 };
 
 shoots.subscribe((shoots) => {
   Object.values(shoots).forEach(({ angle, top, left, el }) => {
-    window.requestAnimationFrame(() => {
-      el.style.transform = `translateX(${left}px) translateY(${top}px)`;
-      const shoot = el.children[0] as HTMLDivElement;
-      shoot.style.transform = `rotateX(-30deg) rotateY(${90 - angle}deg)`;
-    });
+    el.style.transform = `translateX(${left}px) translateY(${top}px)`;
+    const shoot = el.children[0] as HTMLDivElement;
+    shoot.style.transform = `rotateX(-30deg) rotateY(${90 - angle}deg)`;
   });
 });
 
@@ -68,7 +68,6 @@ export const onShootHit = (id: number) => {
       const { left, top, el } = shoots.value[id];
       boardElement.removeChild(el);
       sparcle({ top, left });
-      console.log(top, left);
       delete draft[id];
     }, shoots.value)()
   );
