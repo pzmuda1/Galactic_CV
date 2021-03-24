@@ -105,12 +105,14 @@ timer(0, 25)
     );
   });
 
-listenToKey("Space", {
-  onStart: () => {
-    fire();
-  },
-  constantInterval: 500,
-  constant: () => {
-    fire();
-  },
-});
+export const initShoots = () => {
+  listenToKey("Space", {
+    onStart: () => {
+      fire();
+    },
+    constantInterval: 500,
+    constant: () => {
+      fire();
+    },
+  });
+};

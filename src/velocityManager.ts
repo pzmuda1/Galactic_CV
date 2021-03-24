@@ -6,9 +6,8 @@ import { windowSize } from "./windowSize";
 const FORWARD_VELOCITY = 3;
 const BACKWARD_VELOCITY = -1.5;
 
-export const velocity = new BehaviorSubject(0);
 export const isAccelerating = new BehaviorSubject(false);
-const isGoingBackward = new BehaviorSubject(false);
+export const isGoingBackward = new BehaviorSubject(false);
 
 export const velocity$ = timer(0, 10).pipe(
   switchMap(() => {

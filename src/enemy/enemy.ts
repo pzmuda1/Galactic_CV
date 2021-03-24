@@ -21,7 +21,7 @@ export const addEnemy = ({ top, left }: { top: number; left: number }) => {
     .subscribe(() => {
       const { top: boardTop, left: boardLeft } = boardPosition.value;
 
-      if (boardTop < -1 || boardLeft < -0.4) {
+      if (boardTop < -1 || boardLeft < -0.8) {
         return;
       }
 

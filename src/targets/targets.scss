@@ -1,12 +1,62 @@
 .target {
   position: fixed;
-  width: 50px;
-  height: 50px;
-  background: white;
-  will-change: transform;
+  will-change: box-shadow;
   transform: translate3d(-50%, -50%, 0);
+  overflow: visible;
+  width: 8.8em;
+  height: 8.8em;
+
+  &::before {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    content: "";
+    border-radius: 100%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow:
+      0 0 50px #fff,
+      /* outer white */
+      -10px 0 80px #f0f,
+      /* outer left magenta */
+      10px 0 80px #0ff;
+    /* outer right cyan */
+  }
 }
 
 .target.active {
-  background: red;
+  &::before {
+    opacity: 1;
+  }
+}
+
+.target1,
+.target2,
+.target3 {
+  width: 107%;
+  height: 107%;
+  background: url('./target1.png');
+  background-size: 380%;
+  position: relative;
+  left: -5px;
+  top: -4px;
+}
+
+.target1 {
+  background-position: -0.8em -0.65em;
+}
+
+.target2 {
+  background-size: 39.5em;
+  background-position: -13em -1.6em;
+  width: 13.5em;
+  left: -2.2em;
+}
+
+.target3 {
+  background-size: 340%;
+  background-position: -21em -9.5em;
 }

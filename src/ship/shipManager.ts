@@ -11,7 +11,7 @@ import {
   getSinFromDegrees,
   listenToKey,
 } from "../utils";
-import { velocity$, velocity, isAccelerating } from "../velocityManager";
+import { velocity$, isGoingBackward, isAccelerating } from "../velocityManager";
 import "./x-wing.scss";
 import html from "./ship.html";
 import { accelerateSound, stopAccelerateSound } from "./accelerateSound";
@@ -20,10 +20,10 @@ import { boardPosition, BOARD_SIZE } from "../board/boardManager";
 const shipElement = appendToEl(html, document.body);
 const xWingElement = document.getElementById("x-wing");
 
-const MAX_Y = 50;
-const MAX_X = 50;
+const MAX_Y = 175;
+const MAX_X = 175;
 
-const SCREEN_PADDING = 50;
+const SCREEN_PADDING = 100;
 
 export const shipPosition = new BehaviorSubject({
   top: 0,
@@ -32,68 +32,74 @@ export const shipPosition = new BehaviorSubject({
 export const shipAngle = new BehaviorSubject(-45);
 
 const turnLeft = () => {
-  shipAngle.next(shipAngle.value + 1 * (velocity.value >= 0 ? -1 : 1));
+  shipAngle.next(shipAngle.value + 1.5 * (isGoingBackward.value ? 1 : -1));
 };
 
 const turnRight = () => {
-  shipAngle.next(shipAngle.value + 1 * (velocity.value >= 0 ? 1 : -1));
+  shipAngle.next(shipAngle.value + 1.5 * (isGoingBackward.value ? -1 : 1));
 };
 
-velocity$.subscribe(([val, { height, width }]) => {
-  let angle = shipAngle.value % 360;
-  angle = angle > 0 ? angle : angle + 360;
-  const xVelocity = getCosFromDegrees(shipAngle.value) * val;
-  const yVelocity = getSinFromDegrees(shipAngle.value) * val;
+export const initShip = () => {
+  velocity$.subscribe(([val, { height, width }]) => {
+    let angle = shipAngle.value % 360;
+    angle = angle > 0 ? angle : angle + 360;
+    const xVelocity = getCosFromDegrees(shipAngle.value) * val;
+    const yVelocity = getSinFromDegrees(shipAngle.value) * val;
 
-  const { top: boardTop, left: boardLeft } = boardPosition.value;
-  const { top: shipTop, left: shipLeft } = shipPosition.value;
-  const left = shipPosition.value.left + xVelocity;
-  const top = shipPosition.value.top + yVelocity;
-  if (
-    (Math.abs(left) < MAX_X && Math.abs(top) < MAX_Y) ||
-    boardLeft === 0 ||
-    boardTop === 0 ||
-    -boardLeft === BOARD_SIZE - 1 ||
-    -boardTop === BOARD_SIZE - 1 ||
-    Math.abs(shipTop) > MAX_Y ||
-    Math.abs(shipLeft) > MAX_X
-  ) {
-    shipPosition.next({
-      left: Math.min(
-        Math.max(left, -0.5 * width + SCREEN_PADDING),
-        0.5 * width - SCREEN_PADDING
-      ),
-      top: Math.min(
-        Math.max(top, -0.5 * height + SCREEN_PADDING),
-        0.5 * height - SCREEN_PADDING
-      ),
-    });
-  }
-});
+    const { top: boardTop, left: boardLeft } = boardPosition.value;
+    const { top: shipTop, left: shipLeft } = shipPosition.value;
+    const left = shipPosition.value.left + xVelocity;
+    const top = shipPosition.value.top + yVelocity;
+    if (
+      (Math.abs(left) < MAX_X && Math.abs(top) < MAX_Y) ||
+      boardLeft === 0 ||
+      boardTop === 0 ||
+      -boardLeft === BOARD_SIZE - 1 ||
+      -boardTop === BOARD_SIZE - 1 ||
+      Math.abs(shipTop) > MAX_Y ||
+      Math.abs(shipLeft) > MAX_X
+    ) {
+      shipPosition.next({
+        left: Math.min(
+          Math.max(left, -0.5 * width + SCREEN_PADDING),
+          0.5 * width - SCREEN_PADDING
+        ),
+        top: Math.min(
+          Math.max(top, -0.5 * height + SCREEN_PADDING),
+          0.5 * height - SCREEN_PADDING
+        ),
+      });
+    }
+  });
 
-isAccelerating.pipe(distinctUntilChanged()).subscribe((state) => {
-  if (state) {
-    accelerateSound();
-    shipElement.classList.add("accelerating");
-  } else {
-    shipElement.classList.remove("accelerating");
-    stopAccelerateSound();
-  }
-});
+  isAccelerating.pipe(distinctUntilChanged()).subscribe((state) => {
+    if (state) {
+      accelerateSound();
+      shipElement.classList.add("accelerating");
+    } else {
+      shipElement.classList.remove("accelerating");
+      stopAccelerateSound();
+    }
+  });
 
-listenToKey("ArrowLeft", {
-  constant: () => {
-    turnLeft();
-  },
-});
+  listenToKey("ArrowLeft", {
+    constant: () => {
+      turnLeft();
+    },
+  });
 
-listenToKey("ArrowRight", {
-  constant: () => {
-    turnRight();
-  },
-});
+  listenToKey("ArrowRight", {
+    constant: () => {
+      turnRight();
+    },
+  });
 
-combineLatest([shipPosition, shipAngle]).subscribe(([{ left, top }, angle]) => {
-  shipElement.style.transform = `translateX(${left}px) translateY(${top}px)`;
-  xWingElement.style.transform = `rotateX(-30deg) rotateY(${90 - angle}deg)`;
-});
+  combineLatest([shipPosition, shipAngle]).subscribe(
+    ([{ left, top }, angle]) => {
+      shipElement.style.transform = `translateX(${left}px) translateY(${top}px)`;
+      xWingElement.style.transform = `rotateX(-30deg) rotateY(${
+        90 - angle
+      }deg)`;
+    }
+  );
+};

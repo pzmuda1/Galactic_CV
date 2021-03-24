@@ -1,8 +1,10 @@
 import "./index.scss";
-import "./intro/intro";
+import { startIntro } from "./intro/intro";
+
+startIntro();
 
 window.onload = () => {
-  import('./game').then(({initGame}) => {
+  import("./game").then(({ initGame }) => {
     initGame();
-  })
+  });
 };

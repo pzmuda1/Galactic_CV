@@ -1,17 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=News+Cycle:400,700);
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-  font: 700 1em "News Cycle", sans-serif;
-  letter-spacing: .15em;
-  color: #ff6;
-  background: #000;
-  overflow: hidden;
-  margin: 0;
-}
-
 .starwars {
 
   section {
@@ -43,6 +31,12 @@ body {
     color: rgb(75, 213, 238);
     opacity: 0;
     animation: intro 6s ease-out 1s;
+
+    // @media only screen and (max-width: 768px) {
+    //   $mobile-width: 14em;
+    //   width: $mobile-width;
+    //   margin: 0 0 0 (- $mobile-width / 2);
+    // }
   }
 
   .logo {
@@ -54,6 +48,14 @@ body {
     height: 70px;
     width: 280px;
     position: relative;
+    margin: 0 280px;
+
+    @media only screen and (max-width: 768px) {
+      animation: logoMobile 9s ease-out 9s;
+      height: 70px;
+      width: 280px;
+      margin: 0 280px;
+    }
   }
 
   .titles {
@@ -68,6 +70,10 @@ body {
     overflow: hidden;
     transform-origin: 50% 100%;
     transform: perspective(300px) rotateX(25deg);
+
+    @media only screen and (max-width: 768px) {
+      font-size: 200%;
+    }
 
     >div {
       position: absolute;
@@ -105,7 +111,7 @@ body {
   0% {
     $logo-width: 280px;
     width: $logo-width;
-    margin:  0 (- $logo-width / 2);
+    margin: 0 (- $logo-width / 2);
     transform: scale(2.75);
     opacity: 1;
   }
@@ -115,7 +121,7 @@ body {
 
     $logo-width: 280px;
     width: $logo-width;
-    margin:  0 (- $logo-width / 2);
+    margin: 0 (- $logo-width / 2);
   }
 
   100% {
@@ -125,7 +131,35 @@ body {
 
     $logo-width: 280px;
     width: $logo-width;
-    margin:  0 (- $logo-width / 2);
+    margin: 0 (- $logo-width / 2);
+  }
+}
+
+@keyframes logoMobile {
+  0% {
+    $logo-width: 280px;
+    width: $logo-width;
+    margin: 0 (- $logo-width / 2);
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+
+    $logo-width: 280px;
+    width: $logo-width;
+    margin: 0 (- $logo-width / 2);
+  }
+
+  100% {
+    transform: scale(0.1);
+
+    opacity: 0;
+
+    $logo-width: 280px;
+    width: $logo-width;
+    margin: 0 (- $logo-width / 2);
   }
 }
 
