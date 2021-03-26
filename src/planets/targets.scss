@@ -31,22 +31,50 @@
   &::before {
     opacity: 1;
   }
+
+  .target1,
+  .target2,
+  .target3,
+  .target4 {
+    &::after {
+      opacity: 1;
+    }
+  }
 }
 
 .target1,
 .target2,
-.target3 {
+.target3,
+.target4 {
   width: 107%;
   height: 107%;
-  background: url('./target1.png');
+  background: url('./planets.png');
   background-size: 380%;
   position: relative;
   left: -5px;
   top: -4px;
+
+  &::after {
+    opacity: 0;
+    position: absolute;
+    transition: opacity 0.3s;
+    top: 95%;
+    font-size: 1.2em;
+    display: block;
+    left: 0;
+    right: 0;
+    text-align: center;
+    word-wrap: none;
+    white-space: nowrap;
+  }
 }
 
 .target1 {
   background-position: -0.8em -0.65em;
+
+  &::after {
+    content: 'About me';
+  }
 }
 
 .target2 {
@@ -54,9 +82,26 @@
   background-position: -13em -1.6em;
   width: 13.5em;
   left: -2.2em;
+
+  &::after {
+    content: 'Resume';
+  }
 }
 
 .target3 {
   background-size: 340%;
   background-position: -21em -9.5em;
+
+  &::after {
+    content: 'Skills';
+  }
+}
+
+.target4 {
+  background-size: 370%;
+  background-position: -12em -11.2em;
+
+  &::after {
+    content: 'Fun';
+  }
 }

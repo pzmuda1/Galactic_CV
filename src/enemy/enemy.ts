@@ -8,6 +8,8 @@ import { takeUntil } from "rxjs/operators";
 
 const ENEMY_VELOCITY = 2;
 
+export const EnemiesAliveCounter = new BehaviorSubject(0);
+
 export const addEnemy = ({ top, left }: { top: number; left: number }) => {
   const enemyPosition = new BehaviorSubject({
     top,
@@ -15,6 +17,7 @@ export const addEnemy = ({ top, left }: { top: number; left: number }) => {
     angle: 0,
   });
   const destroyed = new Subject();
+  EnemiesAliveCounter.next(EnemiesAliveCounter.value + 1);
 
   timer(0, 10)
     .pipe(takeUntil(destroyed))
@@ -52,6 +55,7 @@ export const addEnemy = ({ top, left }: { top: number; left: number }) => {
           destroyed.next(true);
           boardElement.removeChild(enemyEl);
           onShootHit(id);
+          EnemiesAliveCounter.next(EnemiesAliveCounter.value - 1);
         }
       });
     });

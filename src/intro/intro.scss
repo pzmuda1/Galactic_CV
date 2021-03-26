@@ -1,4 +1,14 @@
 @import url(https://fonts.googleapis.com/css?family=News+Cycle:400,700);
+@import '../colors.scss';
+
+.skip {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: fit-content;
+  cursor: pointer;
+}
 
 .starwars {
 
@@ -18,7 +28,7 @@
     cursor: pointer;
 
     span {
-      color: rgb(75, 213, 238);
+      color: $blue;
     }
   }
 
@@ -28,7 +38,7 @@
     margin: 0 0 0 (- $intro-width / 2);
     font-size: 200%;
     font-weight: 400;
-    color: rgb(75, 213, 238);
+    color: $blue;
     opacity: 0;
     animation: intro 6s ease-out 1s;
 

@@ -10,10 +10,11 @@ import "./shoot.scss";
 import html from "./shoot.html";
 import produce from "immer";
 import { windowSize } from "../windowSize";
-import { switchMap } from "rxjs/operators";
+import { switchMap, take } from "rxjs/operators";
 import { boardElement, boardPosition } from "../board/boardManager";
 import { sparcle } from "./explode";
 import { shootSound } from "./shootSound";
+import { activePlanet } from "../planets/planets";
 
 export interface IShoot {
   top: number;
@@ -28,18 +29,24 @@ export const shoots = new BehaviorSubject<{
 }>({});
 
 const fire = () => {
-  if (Object.keys(shoots.value).length === 10) {
+  if (Object.keys(shoots.value).length === 10 || activePlanet.value !== null) {
     return;
   }
 
-  windowSize.subscribe(({ height, width }) => {
+  windowSize.pipe(take(1)).subscribe(({ height, width }) => {
     const el = appendToEl(html, boardElement);
     const { left: boardLeft, top: boardTop } = boardPosition.value;
     const { left: shipLeft, top: shipTop } = shipPosition.value;
 
+    const isMobile = width <= 768;
+    const mobileShift = isMobile ? (document.body.clientHeight - height) : 0;
+
+    console.log(height);
+    console.log(document.body);
+
     const id = new Date().getTime();
     const shoot: IShoot = {
-      top: (-boardTop + 0.5) * height + shipTop,
+      top: (-boardTop + 0.5) * height + shipTop + mobileShift,
       left: (-boardLeft + 0.5) * width + shipLeft,
       angle: shipAngle.value,
       el: el as HTMLDivElement,
@@ -106,7 +113,7 @@ timer(0, 25)
   });
 
 export const initShoots = () => {
-  listenToKey("Space", {
+  listenToKey(["Space"], {
     onStart: () => {
       fire();
     },

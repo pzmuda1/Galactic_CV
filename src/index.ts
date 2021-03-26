@@ -1,5 +1,6 @@
 import "./index.scss";
 import { startIntro } from "./intro/intro";
+import "./Piotr Żmuda CV.pdf";
 
 startIntro();
 

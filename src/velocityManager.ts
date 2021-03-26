@@ -23,7 +23,7 @@ export const velocity$ = timer(0, 10).pipe(
   })
 );
 
-listenToKey("ArrowUp", {
+listenToKey(["ArrowUp", "KeyW"], {
   onStart: () => {
     isAccelerating.next(true);
   },
@@ -32,7 +32,7 @@ listenToKey("ArrowUp", {
   },
 });
 
-listenToKey("ArrowDown", {
+listenToKey(["ArrowDown", "KeyS"], {
   onStart: () => {
     isGoingBackward.next(true);
   },

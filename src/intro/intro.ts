@@ -12,7 +12,18 @@ export const startOverlay = document.getElementById("start-overlay");
 
 export const startIntro = () => {
   const startElement = appendToEl(start, startOverlay);
-  startElement.onclick = () => {
+
+  const startIntroEl = startElement.getElementsByClassName(
+    "start"
+  )[0] as HTMLElement;
+  const skipEl = startElement.getElementsByClassName("skip")[0] as HTMLElement;
+
+  skipEl.onclick = () => {
+    introFinished.next(true);
+    startOverlay.classList.add("fadeOut");
+  };
+
+  startIntroEl.onclick = () => {
     startElement.style.display = "none";
     const introEl = appendToEl(intro, startOverlay);
     audio.play();

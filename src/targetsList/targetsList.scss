@@ -1,0 +1,99 @@
+@import '../colors.scss';
+
+.wrapper {
+  position: absolute;
+  right: 20px;
+  width: 25em;
+  max-width: 80vw;
+  border: solid 5px black;
+  top: 25px;
+  background-color: black;
+  background-image: radial-gradient(rgba(0, 150, 0, 0.75), black 120%);
+  margin: 0;
+  overflow: hidden;
+  padding: 15px;
+  color: white;
+  opacity: 0.75;
+  font: 1.2em Inconsolata, monospace;
+  text-shadow: 0 0 5px #C8C8C8;
+  z-index: 12;
+  transition: background 0.3s;
+
+  &.minimized {
+    background: transparent;
+    border: none;
+    border: solid 0px black;
+
+    li,
+    p {
+      opacity: 0;
+    }
+
+    &::after {
+      opacity: 0;
+    }
+
+    .minimize {
+      display: none;
+    }
+
+    .maximize {
+      display: block;
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: repeating-linear-gradient(0deg,
+        rgba(black, 0.15),
+        rgba(black, 0.15) 1px,
+        transparent 1px,
+        transparent 2px);
+    pointer-events: none;
+  }
+
+  .minimize,
+  .maximize {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: black;
+    padding: 5px 10px;
+    cursor: pointer;
+    z-index: 1;
+    user-select: none;
+    color: $gold;
+  }
+
+  .maximize {
+    display: none;
+    border: solid 2px $gold;
+    border-radius: 10px;
+    padding: 10px 20px;
+  }
+}
+
+::selection {
+  background: #0080FF;
+  text-shadow: none;
+}
+
+ul {
+  margin: 10px 0;
+  padding: 0 20px;
+}
+
+p {
+  margin: 0 0 5px;
+}
+
+li {
+  &.done {
+    text-decoration: line-through;
+  }
+}

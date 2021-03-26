@@ -69,10 +69,10 @@ var config = {
         : null,
       { test: /\.html$/, loader: "html-loader?exportAsEs6Default" },
       {
-        test: /\.(png|jpg|gif|svg|ico)$/,
+        test: /\.(png|jpg|gif|svg|ico|pdf)$/,
         loader: "file-loader",
         query: {
-          outputPath: "./img/",
+          outputPath: "./assets/",
           name: "[name].[ext]",
           esModule: false,
         },

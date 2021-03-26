@@ -1,0 +1,64 @@
+@import '../colors.scss';
+
+.modal {
+  height: max-content;
+  transform: translate3d(-50%, -50%, 0);
+  top: 50%;
+  left: 50%;
+  background: black;
+  position: fixed;
+  border: 5px solid $gold;
+  border-radius: 10px;
+  display: flex;
+  padding: 20px;
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px 10px;
+    cursor: pointer;
+    background: black;
+  }
+
+  img {
+    width: 200px;
+    height: 100%;
+  }
+
+  a {
+    color: $blue;
+    text-decoration: none;
+  }
+
+  div {
+    padding: 0 20px;
+
+    h2 {
+      margin-top: -10px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    height: 80vh;
+    width: 80vw;
+    flex-direction: column;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    div {
+      flex: 1 1 auto;
+      overflow: auto;
+      font-size: 18px;
+      padding: 20px 0;
+
+      h2 {
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

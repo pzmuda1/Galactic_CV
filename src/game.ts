@@ -14,9 +14,9 @@ export const initGame = () => {
       initShip();
     });
   });
-  import("./targets/targets").then(({ initTargets }) => {
+  import("./planets/planets").then(({ initPlanets }) => {
     loadElements.subscribe(() => {
-      initTargets();
+      initPlanets();
     });
   });
   import("./shoots/shoots").then(({ initShoots }) => {
@@ -28,6 +28,16 @@ export const initGame = () => {
     loadElements.subscribe(() => {
       addEnemy({ top: 50, left: 50 });
       addEnemy({ top: 300, left: 50 });
+
+      import("./targetsList/targetsList").then(({ initTargetsList }) => {
+        initTargetsList();
+      });
+    });
+  });
+
+  import("./mobileControls/mobileControls").then(({ initMobileControls }) => {
+    loadElements.subscribe(() => {
+      initMobileControls();
     });
   });
 };

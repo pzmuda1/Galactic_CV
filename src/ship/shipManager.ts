@@ -3,6 +3,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  take,
   throttleTime,
 } from "rxjs/operators";
 import {
@@ -19,6 +20,7 @@ import { boardPosition, BOARD_SIZE } from "../board/boardManager";
 
 const shipElement = appendToEl(html, document.body);
 const xWingElement = document.getElementById("x-wing");
+const instructionsElement = document.getElementById("instructions");
 
 const MAX_Y = 175;
 const MAX_X = 175;
@@ -30,6 +32,7 @@ export const shipPosition = new BehaviorSubject({
   left: 0,
 });
 export const shipAngle = new BehaviorSubject(-45);
+export const shipMoved = new BehaviorSubject(false);
 
 const turnLeft = () => {
   shipAngle.next(shipAngle.value + 1.5 * (isGoingBackward.value ? 1 : -1));
@@ -38,6 +41,18 @@ const turnLeft = () => {
 const turnRight = () => {
   shipAngle.next(shipAngle.value + 1.5 * (isGoingBackward.value ? -1 : 1));
 };
+
+shipMoved
+  .pipe(
+    filter((val) => val),
+    take(1)
+  )
+  .subscribe(() => {
+    instructionsElement.classList.add("fadeOut");
+    instructionsElement.addEventListener("transitionend", () => {
+      shipElement.removeChild(instructionsElement);
+    });
+  });
 
 export const initShip = () => {
   velocity$.subscribe(([val, { height, width }]) => {
@@ -74,6 +89,7 @@ export const initShip = () => {
 
   isAccelerating.pipe(distinctUntilChanged()).subscribe((state) => {
     if (state) {
+      shipMoved.next(true);
       accelerateSound();
       shipElement.classList.add("accelerating");
     } else {
@@ -82,13 +98,13 @@ export const initShip = () => {
     }
   });
 
-  listenToKey("ArrowLeft", {
+  listenToKey(["ArrowLeft", "KeyA"], {
     constant: () => {
       turnLeft();
     },
   });
 
-  listenToKey("ArrowRight", {
+  listenToKey(["ArrowRight", "KeyD"], {
     constant: () => {
       turnRight();
     },
