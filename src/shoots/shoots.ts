@@ -9,7 +9,7 @@ import { shipAngle, shipPosition } from "../ship/shipManager";
 import "./shoot.scss";
 import html from "./shoot.html";
 import produce from "immer";
-import { windowSize } from "../windowSize";
+import { isMobile, windowSize } from "../windowSize";
 import { switchMap, take } from "rxjs/operators";
 import { boardElement, boardPosition } from "../board/boardManager";
 import { sparcle } from "./explode";
@@ -29,7 +29,12 @@ export const shoots = new BehaviorSubject<{
 }>({});
 
 const fire = () => {
-  if (Object.keys(shoots.value).length === 10 || activePlanet.value !== null) {
+  const maxShootsCount = isMobile.value ? 5 : 10;
+
+  if (
+    Object.keys(shoots.value).length === maxShootsCount ||
+    activePlanet.value !== null
+  ) {
     return;
   }
 
@@ -39,10 +44,7 @@ const fire = () => {
     const { left: shipLeft, top: shipTop } = shipPosition.value;
 
     const isMobile = width <= 768;
-    const mobileShift = isMobile ? (document.body.clientHeight - height) : 0;
-
-    console.log(height);
-    console.log(document.body);
+    const mobileShift = isMobile ? document.body.clientHeight - height : 0;
 
     const id = new Date().getTime();
     const shoot: IShoot = {
@@ -117,9 +119,10 @@ export const initShoots = () => {
     onStart: () => {
       fire();
     },
-    constantInterval: 500,
+    constantInterval: 400,
     constant: () => {
       fire();
     },
+    throttle: 200
   });
 };

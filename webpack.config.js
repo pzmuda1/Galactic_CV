@@ -12,7 +12,7 @@ const plugins = [
     },
   }),
   new HtmlWebpackPlugin({
-    title: "Galactic CV",
+    title: "Frontend Wars - Piotr Żmuda",
     template: "!!ejs-loader!src/index.html",
   }),
   new MiniCssExtractPlugin({

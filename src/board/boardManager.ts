@@ -1,14 +1,26 @@
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { shipAngle } from "../ship/shipManager";
-import { getCosFromDegrees, getSinFromDegrees, appendToEl, root } from "../utils";
+import {
+  getCosFromDegrees,
+  getSinFromDegrees,
+  appendToEl,
+  root,
+} from "../utils";
 import { velocity$ } from "../velocityManager";
 import "./board.scss";
 import board from "./board.html";
-import { windowSize } from "../windowSize";
-import { debounceTime, pairwise, startWith, throttleTime, withLatestFrom } from "rxjs/operators";
+import { isMobile, windowSize } from "../windowSize";
+import {
+  debounceTime,
+  pairwise,
+  startWith,
+  throttleTime,
+  withLatestFrom,
+} from "rxjs/operators";
 
 // in vw and vh
-export const BOARD_SIZE = 2;
+export const BOARD_SIZE_X = () => (isMobile.value ? 3 : 2);
+export const BOARD_SIZE_Y = 2;
 const BOARD_SIZE_MULITPLIER = 450;
 
 appendToEl(board);
@@ -29,22 +41,18 @@ velocity$.pipe(throttleTime(10)).subscribe(([val, { height, width }]) => {
 
   boardPosition.next({
     left: Math.min(
-      Math.max(-BOARD_SIZE + 1, boardPosition.value.left - xVelocity),
+      Math.max(-BOARD_SIZE_X() + 1, boardPosition.value.left - xVelocity),
       0
     ),
     top: Math.min(
-      Math.max(-BOARD_SIZE + 1, boardPosition.value.top - yVelocity),
+      Math.max(-BOARD_SIZE_Y + 1, boardPosition.value.top - yVelocity),
       0
     ),
   });
 });
 
 boardPosition
-  .pipe(
-    startWith(boardPosition.value),
-    pairwise(),
-    withLatestFrom(windowSize)
-  )
+  .pipe(startWith(boardPosition.value), pairwise(), withLatestFrom(windowSize))
   .subscribe(
     ([[{ left, top }, { left: newLeft, top: newTop }], { height, width }]) => {
       root.scrollLeft = -newLeft * width;

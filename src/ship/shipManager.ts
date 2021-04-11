@@ -16,7 +16,11 @@ import { velocity$, isGoingBackward, isAccelerating } from "../velocityManager";
 import "./x-wing.scss";
 import html from "./ship.html";
 import { accelerateSound, stopAccelerateSound } from "./accelerateSound";
-import { boardPosition, BOARD_SIZE } from "../board/boardManager";
+import {
+  boardPosition,
+  BOARD_SIZE_X,
+  BOARD_SIZE_Y,
+} from "../board/boardManager";
 
 const shipElement = appendToEl(html, document.body);
 const xWingElement = document.getElementById("x-wing");
@@ -69,8 +73,8 @@ export const initShip = () => {
       (Math.abs(left) < MAX_X && Math.abs(top) < MAX_Y) ||
       boardLeft === 0 ||
       boardTop === 0 ||
-      -boardLeft === BOARD_SIZE - 1 ||
-      -boardTop === BOARD_SIZE - 1 ||
+      -boardLeft === BOARD_SIZE_X() - 1 ||
+      -boardTop === BOARD_SIZE_Y - 1 ||
       Math.abs(shipTop) > MAX_Y ||
       Math.abs(shipLeft) > MAX_X
     ) {

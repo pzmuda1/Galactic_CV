@@ -2,8 +2,8 @@ import { BehaviorSubject, combineLatest } from "rxjs";
 import { distinctUntilChanged, pairwise } from "rxjs/operators";
 import { boardElement, boardPosition } from "../board/boardManager";
 import { shipPosition } from "../ship/shipManager";
-import { windowSize } from "../windowSize";
-import { appendToEl, listenToKey, modalsOverlay } from "../utils";
+import { isMobile, windowSize } from "../windowSize";
+import { appendToEl, listenToKey, modalsOverlay, openModal } from "../utils";
 import "./targets.scss";
 import "./modal.scss";
 
@@ -50,10 +50,8 @@ export const planets = [
 ];
 
 export const initPlanets = () => {
-  planets.forEach(({ html, left, top }, index) => {
+  planets.forEach(({ html }, index) => {
     const targetEl = appendToEl(html, boardElement);
-    targetEl.style.left = `${left * 100}vw`;
-    targetEl.style.top = `${top * 100}vh`;
     targetEl.classList.add("target");
     targetEl.id = "target_" + index;
 
@@ -67,14 +65,17 @@ export const initPlanets = () => {
       { top: boardTop, left: boardLeft },
       { height, width },
     ]) => {
+      const mobileMultiplier = isMobile.value ? 1.5 : 1;
       planets.forEach(({ el, left, top }, index) => {
-        el.style.left = `${left * width}px`;
-        el.style.top = `${top * height}px`;
-        const distanceXFromCenter = (left - 0.5) * width;
-        const distanceYFromCenter = (top - 0.5) * height;
+        const _left = left * mobileMultiplier;
+        const _top = top;
 
-        const isMobile = width <= 768;
-        const activePadding = isMobile ? 75 : 150;
+        el.style.left = `${_left * width}px`;
+        el.style.top = `${_top * height}px`;
+        const distanceXFromCenter = (_left - 0.5) * width;
+        const distanceYFromCenter = (_top - 0.5) * height;
+
+        const activePadding = isMobile.value ? 75 : 150;
 
         if (
           Math.abs(distanceYFromCenter - shipTop + boardTop * height) <
@@ -93,10 +94,6 @@ export const initPlanets = () => {
   activePlanet
     .pipe(distinctUntilChanged(), pairwise())
     .subscribe(([past, current]) => {
-      if (modalId.value !== null) {
-        return;
-      }
-
       if (past !== null) {
         const el = document.getElementById("target_" + past);
         el.classList.remove("active");
@@ -119,26 +116,11 @@ export const initPlanets = () => {
           return;
         }
 
-        modalId.next(index);
-        const modal = appendToEl(active.modal, modalsOverlay);
-        modalsOverlay.classList.add("fadeIn");
-        modalsOverlay.classList.remove("fadeOut");
-
-        const closeEl = modal.getElementsByClassName("close")[0] as HTMLElement;
-        closeEl.onclick = () => {
-          modalsOverlay.classList.add("fadeOut");
-          const removeModal = () => {
-            modalsOverlay.removeChild(modal);
-            modalsOverlay.removeEventListener("transitionend", removeModal);
-            modalId.next(null);
-
-            if (!visitedPlanetsIds.includes(index)) {
-              visitedPlanets.next([...visitedPlanetsIds, index]);
-            }
-          };
-
-          modalsOverlay.addEventListener("transitionend", removeModal);
-        };
+        openModal(active.modal, () => {
+          if (!visitedPlanetsIds.includes(index)) {
+            visitedPlanets.next([...visitedPlanetsIds, index]);
+          }
+        });
       }
     },
   });

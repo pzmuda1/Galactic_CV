@@ -1,5 +1,6 @@
 import { filter, share, take } from "rxjs/operators";
 import { introFinished } from "./intro/intro";
+import { isMobile } from "./windowSize";
 
 const loadElements = introFinished.pipe(
   filter((val) => val),
@@ -26,8 +27,12 @@ export const initGame = () => {
   });
   import("./enemy/enemy").then(({ addEnemy }) => {
     loadElements.subscribe(() => {
-      addEnemy({ top: 50, left: 50 });
-      addEnemy({ top: 300, left: 50 });
+      if (!isMobile.value) {
+        addEnemy({ top: 50, left: 50 });
+        addEnemy({ top: 300, left: 50 });
+      } else {
+        addEnemy({ top: 300, left: 50 });
+      }
 
       import("./targetsList/targetsList").then(({ initTargetsList }) => {
         initTargetsList();

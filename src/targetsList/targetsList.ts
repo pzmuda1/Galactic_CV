@@ -1,8 +1,8 @@
 import { combineLatest, Subject } from "rxjs";
-import { filter, map, startWith, take, tap } from "rxjs/operators";
+import { filter, map, startWith, take, tap, delay } from "rxjs/operators";
 import { EnemiesAliveCounter } from "../enemy/enemy";
 import { planets, visitedPlanets } from "../planets/planets";
-import { appendToEl, controlsOverlay, modalsOverlay, victory } from "../utils";
+import { appendToEl, controlsOverlay, openModal } from "../utils";
 import html from "./targetsList.html";
 import victoryHtml from "./victory.html";
 import "./targetsList.scss";
@@ -89,12 +89,11 @@ export const initTargetsList = () => {
   );
 
   combineLatest([enemiesDefated, allPlanetsVisited])
-    .pipe(filter(([defated, visited]) => defated && visited))
+    .pipe(
+      filter(([defated, visited]) => defated && visited),
+      delay(300)
+    )
     .subscribe(() => {
-      victory.next(true);
-      modalsOverlay.innerHTML = "";
-      appendToEl(victoryHtml, modalsOverlay);
-      modalsOverlay.classList.add("fadeIn");
-      modalsOverlay.classList.remove("fadeOut");
+      openModal(victoryHtml, () => {});
     });
 };
